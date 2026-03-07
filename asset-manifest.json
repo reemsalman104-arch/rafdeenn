@@ -1,16 +1,16 @@
 {
   "files": {
     "main.css": "/rafdeenn/static/css/main.9b7d6a83.css",
-    "main.js": "/rafdeenn/static/js/main.36f19154.js",
+    "main.js": "/rafdeenn/static/js/main.ac56ac20.js",
     "static/js/453.9a4308bf.chunk.js": "/rafdeenn/static/js/453.9a4308bf.chunk.js",
     "static/media/logo.png": "/rafdeenn/static/media/logo.7b634c44daf73e494099.png",
     "index.html": "/rafdeenn/index.html",
     "main.9b7d6a83.css.map": "/rafdeenn/static/css/main.9b7d6a83.css.map",
-    "main.36f19154.js.map": "/rafdeenn/static/js/main.36f19154.js.map",
+    "main.ac56ac20.js.map": "/rafdeenn/static/js/main.ac56ac20.js.map",
     "453.9a4308bf.chunk.js.map": "/rafdeenn/static/js/453.9a4308bf.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9b7d6a83.css",
-    "static/js/main.36f19154.js"
+    "static/js/main.ac56ac20.js"
   ]
 }
