@@ -1,16 +1,16 @@
 {
   "files": {
-    "main.css": "/rafdeenn/static/css/main.9b7d6a83.css",
-    "main.js": "/rafdeenn/static/js/main.ac56ac20.js",
+    "main.css": "/rafdeenn/static/css/main.baa43270.css",
+    "main.js": "/rafdeenn/static/js/main.c9afcf6d.js",
     "static/js/453.9a4308bf.chunk.js": "/rafdeenn/static/js/453.9a4308bf.chunk.js",
     "static/media/logo.png": "/rafdeenn/static/media/logo.7b634c44daf73e494099.png",
     "index.html": "/rafdeenn/index.html",
-    "main.9b7d6a83.css.map": "/rafdeenn/static/css/main.9b7d6a83.css.map",
-    "main.ac56ac20.js.map": "/rafdeenn/static/js/main.ac56ac20.js.map",
+    "main.baa43270.css.map": "/rafdeenn/static/css/main.baa43270.css.map",
+    "main.c9afcf6d.js.map": "/rafdeenn/static/js/main.c9afcf6d.js.map",
     "453.9a4308bf.chunk.js.map": "/rafdeenn/static/js/453.9a4308bf.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.9b7d6a83.css",
-    "static/js/main.ac56ac20.js"
+    "static/css/main.baa43270.css",
+    "static/js/main.c9afcf6d.js"
   ]
 }
