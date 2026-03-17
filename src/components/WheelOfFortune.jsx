@@ -37,7 +37,7 @@ export default function WheelOfFortune({ items = [], logo, size = 400 }) {
     ctx.clearRect(0, 0, size, size);
 
     items.forEach((item, i) => {
-      const start = i * arc;
+      const start = i * arc - Math.PI / 2; // Start from top (12 o'clock)
       ctx.beginPath();
       ctx.moveTo(radius, radius);
       ctx.arc(radius, radius, radius, start, start + arc);
@@ -65,6 +65,7 @@ export default function WheelOfFortune({ items = [], logo, size = 400 }) {
     const randomOffset = Math.random() * arcDeg;
     const extraSpins = 5;
     const finalAngle = extraSpins * 360 + randomIndex * arcDeg + randomOffset;
+    console.log('Spinning to index:', randomIndex, 'finalAngle:', finalAngle);
     setSpinning(true);
     setAngle(finalAngle);
   };
@@ -73,9 +74,10 @@ export default function WheelOfFortune({ items = [], logo, size = 400 }) {
     const wedgeCount = items.length;
     if (!wedgeCount) return;
     const arcDeg = 360 / wedgeCount;
+    // Since pointer is at top and wheel starts from top, the winning section is at angle % 360
     let normalized = angle % 360;
-    normalized = (360 - normalized + arcDeg / 2) % 360;
     const index = Math.floor(normalized / arcDeg) % wedgeCount;
+    console.log('Transition end: angle:', angle, 'normalized:', normalized, 'arcDeg:', arcDeg, 'index:', index, 'selected:', items[index]);
     setSelected(items[index]);
     setSpinning(false);
   };

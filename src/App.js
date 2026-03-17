@@ -1,4 +1,4 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Wheell from "./pages/Wheel";
 import Dashboard from "./pages/Dashboard";
@@ -16,6 +16,7 @@ function App() {
     
       <Routes>
        
+        <Route path="/" element={<Wheell />} />
         <Route path="/wheel" element={<Wheell />} />
         <Route path="/login" element={<Login />} />
 <Route path="/forgot-password" element={<ForgotPassword />} />
@@ -23,14 +24,14 @@ function App() {
 
 
 <Route path="/profile" element={<Profile />} />
-        <Route
-  path="/dashboard"
-  element={
-    <ProtectedRoute>
-      <Dashboard />
-    </ProtectedRoute>
-  }
-/>
+      <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute adminOnly>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
 
       </Routes>
     

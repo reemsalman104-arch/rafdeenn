@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { registerUser } from "../api/auth";
+
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { FaGoogle } from "react-icons/fa";

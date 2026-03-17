@@ -1,4 +1,27 @@
-// services/api.js
+const BASE_URL = process.env.REACT_APP_API_URL || "https://goget-ef.website/wheel/public";
+
+async function request(path, options = {}) {
+  const res = await fetch(`${BASE_URL}${path}`, options);
+  const contentType = res.headers.get("content-type") || "";
+  let data;
+
+  if (contentType.includes("application/json")) {
+    data = await res.json();
+  } else {
+    data = await res.text();
+  }
+
+  if (!res.ok) {
+    // backend errors usually come as {message: ..., errors: {...}}
+    throw data;
+  }
+  return data;
+}
+
+function authHeaders() {
+  const token = localStorage.getItem("token");
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
 
 // 🔹 Login
 export const loginRequest = (data) => {
@@ -15,7 +38,20 @@ export const loginRequest = (data) => {
 
 // 🔹 Wheel Items (8 أقسام)
 
-   
+   // ---------- WHEEL ----------
+export const spinWheelRequest = (wheel_section_id) => {
+  return request("/api/spin", {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify({ wheel_section_id }),
+  });
+};
+
+export const getWheelSections = () => {
+  return request("/api/wheel-sections", {
+    method: "GET",
+  });
+};
 
 // 🔹 Spin
 export const spinWheel = () => {
@@ -24,5 +60,73 @@ export const spinWheel = () => {
       const randomIndex = Math.floor(Math.random() * 8);
       resolve({ index: randomIndex });
     }, 1000);
+  });
+};
+
+
+// ---------- ADMIN ----------
+export const adminGetUsers = () => {
+  return request("/api/admin/users", {
+    method: "GET",
+    headers: { ...authHeaders() },
+  });
+};
+
+export const adminDeleteUser = (id) => {
+  return request(`/api/admin/users/${id}`, {
+    method: "DELETE",
+    headers: { ...authHeaders() },
+  });
+};
+
+export const adminGetWheelSections = () => {
+  return request("/api/admin/wheel-sections", {
+    method: "GET",
+    headers: { ...authHeaders() },
+  });
+};
+
+export const adminCreateWheelSection = (data) => {
+  return request("/api/admin/wheel-sections", {
+    method: "POST",
+    headers: { ...authHeaders(), "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(data),
+  });
+};
+
+export const adminUpdateWheelSection = (id, data) => {
+  return request(`/api/admin/wheel-sections/${id}`, {
+    method: "PUT",
+    headers: { ...authHeaders(), "Content-Type": "application/json", Accept: "application/json" },
+    body: JSON.stringify(data),
+  });
+};
+
+export const adminDeleteWheelSection = (id) => {
+  return request(`/api/admin/wheel-sections/${id}`, {
+    method: "DELETE",
+    headers: { ...authHeaders() },
+  });
+};
+
+export const adminStats = () => {
+  return request("/api/admin/stats", {
+    method: "GET",
+    headers: { ...authHeaders() },
+  });
+};
+
+export const adminGetUserDetails = (userId) => {
+  return request(`/api/admin/users/${userId}`, {
+    method: "GET",
+    headers: { ...authHeaders() },
+  });
+};
+
+export const updateSpinStatus = (spinId, status) => {
+  return request(`/api/admin/spins/${spinId}/status`, {
+    method: "PUT",
+    headers: { ...authHeaders(), "Content-Type": "application/json" },
+    body: JSON.stringify({ status }),
   });
 };

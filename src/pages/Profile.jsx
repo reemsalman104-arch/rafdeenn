@@ -38,10 +38,11 @@ export default function Profile() {
     const fetchProfile = async () => {
       try {
         const data = await getProfile();
+        console.log(data);
         const user = data?.user ?? data;
         setUserData(user);
         setTempData({ name: user?.name ?? "", email: user?.email ?? "", phone: user?.phone ?? "" });
-        setPreviousAwards(user?.spins ?? user?.previous_awards ?? []);
+        setPreviousAwards(data?.spins ?? []);
       } catch (error) {
         console.error(error);
       }
@@ -266,7 +267,7 @@ const handleChangePassword = async () => {
                 {previousAwards?.length > 0 ? (
                   previousAwards.map((award, index) => (
                     <tr key={index}>
-                      <td>{award?.prize_name ?? award?.name ?? "غير موجود"}</td>
+                      <td>{award?.wheel_section.prize_name ?? award?.name ?? "غير موجود"}</td>
                       <td>{award?.date ?? award?.created_at ?? "غير متوفر"}</td>
                       <td>{award?.status ?? "مفتوح"}</td>
                     </tr>
