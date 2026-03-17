@@ -1,44 +1,31 @@
-import { useState } from "react";
-
+import { useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 export default function ForgotPassword() {
-  const [email, setEmail] = useState("");
-  const [message, setMessage] = useState("");
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-
-    const userExists = users.find((u) => u.email === email);
-
-    if (!userExists) {
-      setMessage("البريد الإلكتروني غير موجود");
-      return;
-    }
-
-    // هنا المفروض يصير ارسال ايميل من backend
-    setMessage("تم إرسال رسالة التحقق إلى بريدك الإلكتروني ✅");
-  };
-
+ 
+  
+ const{isLoading ,message ,handleForgotPassword, email, handleChangepassword } =useContext(AuthContext)
   return (
     <div className="forgot-container">
       <h2>استعادة كلمة المرور</h2>
 
-      <form onSubmit={handleSubmit} className="forgot-form">
+      <form onSubmit={handleForgotPassword} className="forgot-form">
         <input
           type="email"
           placeholder="أدخل بريدك الإلكتروني"
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={ handleChangepassword }
           required
         />
 
         <button type="submit" className="btn-send">
-          إرسال
+          {isLoading ? "...قيد الارسال" : "ارسال"}
+
         </button>
+         {message && <div className="message">{message}</div>}
+        {/* {errors && <div className="message">{errors}</div>} */}
       </form>
 
-      {message && <div className="message">{message}</div>}
+     
 
       <style>{`
         .forgot-container {

@@ -1,42 +1,43 @@
-import { useState } from "react";
+import { useContext } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
 
 export default function Login() {
   const navigate = useNavigate();
+ const{isLoading  ,errors,handleLogin, loginform, handleChangelogin} =useContext(AuthContext)
+  // const [identifier, setIdentifier] = useState(""); // ايميل او رقم
+  // const [password, setPassword] = useState("");
+  // const [error, setError] = useState("");
+// /
+  // const handleLogin = (e) => {
+  //   e.preventDefault();
 
-  const [identifier, setIdentifier] = useState(""); // ايميل او رقم
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
+  //   const users = JSON.parse(localStorage.getItem("users")) || [];
 
-  const handleLogin = (e) => {
-    e.preventDefault();
+  //   const user = users.find(
+  //     (u) =>
+  //       (u.email === identifier || u.phone === identifier) &&
+  //       u.password === password
+  //   );
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+  //   if (!user) {
+  //     setError("بيانات الدخول غير صحيحة");
+  //     return;
+  //   }
 
-    const user = users.find(
-      (u) =>
-        (u.email === identifier || u.phone === identifier) &&
-        u.password === password
-    );
+  //   // Store user info (use name for greeting)
+  //   localStorage.setItem("isUser", "true");
+  //   localStorage.setItem("currentUser", user.email);
+  //   localStorage.setItem("userRole", user.role);
+  //   localStorage.setItem("currentUserName", user.name);
 
-    if (!user) {
-      setError("بيانات الدخول غير صحيحة");
-      return;
-    }
-
-    // Store user info (use name for greeting)
-    localStorage.setItem("isUser", "true");
-    localStorage.setItem("currentUser", user.email);
-    localStorage.setItem("userRole", user.role);
-    localStorage.setItem("currentUserName", user.name);
-
-    // Redirect by role
-    if (user.role === "admin") {
-      navigate("/dashboard", { replace: true });
-    } else {
-      navigate("/wheel", { replace: true });
-    }
-  };
+  //   // Redirect by role
+  //   if (user.role === "admin") {
+  //     navigate("/dashboard", { replace: true });
+  //   } else {
+  //     navigate("/wheel", { replace: true });
+  //   }
+  // };
 
   return (
     <div className="login-container">
@@ -45,24 +46,26 @@ export default function Login() {
       <form onSubmit={handleLogin} className="login-form">
         <input
           type="text"
+          name="email"
           placeholder="البريد الإلكتروني أو رقم الهاتف"
-          value={identifier}
-          onChange={(e) => setIdentifier(e.target.value)}
+          value={loginform.email}
+          onChange={ handleChangelogin}
           required
         />
 
         <input
           type="password"
+          name="password"
           placeholder="كلمة المرور"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={loginform.password}
+           onChange={ handleChangelogin}
           required
         />
 
-        {error && <div className="error">{error}</div>}
+        {errors.server && <div className="error">{errors.server}</div>}
 
         <button type="submit" className="btn-login">
-          دخول
+          {isLoading ? "...جاري الدخول" : "دخول"}
         </button>
 
         <p className="register-link">

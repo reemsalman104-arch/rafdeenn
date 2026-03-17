@@ -1,12 +1,13 @@
 import { useState } from "react";
-
+import { registerUser } from "../api/auth";
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { FaGoogle } from "react-icons/fa";
 
 export default function Register() {
 
 // داخل الـ component
-const { form, errors, handleChange, handleRegister } =
+const { form, errors, handleChange, handleRegister, isLoading } =
     useContext(AuthContext);
 
 
@@ -19,6 +20,11 @@ const { form, errors, handleChange, handleRegister } =
       <h2>إنشاء حساب</h2>
 
       <form onSubmit={handleRegister} className="register-form">
+         <button  className="btn-google" style={{backgroundColor:'#3d62da', color:'white', display:'flex', alignItems:'center', justifyContent:'center', padding:'10px',borderRadius:'8px', border:'none'}} >
+          <FaGoogle style={{ marginRight: "8px" ,color:'white' }} />
+         {isLoading ? "...جاري التسجيل" : "تسجيل عن طريق جوجل"}
+         
+        </button>
         <input
           type="text"
           name="name"
@@ -43,7 +49,7 @@ const { form, errors, handleChange, handleRegister } =
           value={form.email}
           onChange={handleChange}
         />
-        <div className="error">{errors.email}</div>
+       {errors.email && <div className="error">{errors.email[0]}</div>}
 
         <input
           type="password"
@@ -64,8 +70,10 @@ const { form, errors, handleChange, handleRegister } =
         <div className="error">{errors.confirmPassword}</div>
 
         <button type="submit" className="btn-register">
-          تسجيل
+         {isLoading ? "...جاري التسجيل" : "تسجيل"}
         </button>
+        {errors.server && <div className="error">{errors.server}</div>}
+        
       </form>
 
       {/* CSS */}
@@ -79,7 +87,16 @@ const { form, errors, handleChange, handleRegister } =
           background: #fff;
           font-family: Arial, sans-serif;
         }
+         btn-google{  padding: 12px;
+          background-color: #3d62da;
+          color: white;
+          font-size: 16px;
 
+          border: none;
+          border-radius: 8px;
+          cursor: pointer;
+          transition: 0.3s;
+          margin-top: 10px;width:80%}
         h2 {
           text-align: center;
           margin-bottom: 25px;

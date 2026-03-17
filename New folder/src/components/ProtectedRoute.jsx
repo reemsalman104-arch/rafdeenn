@@ -7,7 +7,7 @@ export default function ProtectedRoute({ children, adminOnly }) {
   const { currentUser, role } = useContext(AuthContext);
 
   if (!currentUser) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/dashboard" replace />;
   }
 
   if (adminOnly && role !== "admin") {

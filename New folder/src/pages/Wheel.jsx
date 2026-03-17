@@ -1,12 +1,19 @@
-import { useState } from "react";
+import { useState ,useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Wheel } from "react-custom-roulette";
-import logo from "../assets/logo.png"; // ضع شعارك هنا
-import '../foldcss/wheel.css'
+import logo from "../assets/logo.png";
+import Navbar from "../components/Navbar";
+import '../foldcss/wheel.css';
 export default function Wheell() {
   const navigate = useNavigate();
-  const currentUser = localStorage.getItem("currentUser") || "User";
+  const username = localStorage.getItem("currentUserName") || "User";
+const [showAd,setShowAd] = useState(false)
 
+useEffect(()=>{
+
+setShowAd(true)
+
+},[])
   const [sections] = useState([
     "خصم 10%",
     "خصم 20%",
@@ -38,12 +45,52 @@ export default function Wheell() {
     navigate("/login");
   };
 
+  
+
+useEffect(()=>{
+
+setShowAd(false)
+
+},[])
+
   return (
     <div className="wheel-container">
-      {/* Header */}
-      <div className="wheel-header">
-        <span>مرحبا, {currentUser}</span>
-        <button onClick={handleLogout} className="logout-btn">تسجيل خروج</button>
+
+      {showAd && (
+
+<div className="modal-overlay">
+
+<div className="modal-box">
+
+<button
+className="close-btn"
+onClick={()=>setShowAd(false)}
+>
+✕
+</button>
+
+<video
+autoPlay
+controls
+className="modal-video"
+>
+
+<source src="/video/ad.mp4" type="video/mp4"/>
+
+</video>
+
+</div>
+
+</div>
+
+)}
+
+
+
+
+      {/* Top-right nav area */}
+      <div style={{ width: "100%", display: "flex", justifyContent: "flex-end", alignItems: "center", position: "absolute", top: 0, right: 0, zIndex: 100 }}>
+        <Navbar />
       </div>
 
       {/* Wheel */}
@@ -58,12 +105,12 @@ export default function Wheell() {
           outerBorderWidth={6}
           radiusLineColor="#22c55e"
           radiusLineWidth={2}
-          pointerProps={{ style: { display: "none" } }}
+          pointerProps={{ style: { display: "block" } }}
           onStopSpinning={handleStopSpinning}
         />
 
         {/* Custom pointer */}
-        <div className="custom-pointer"></div>
+        {/* <div className="custom-pointer"></div> */}
 
         {/* Center logo */}
         <div className="center-logo">
@@ -88,7 +135,7 @@ export default function Wheell() {
           </div>
         </div>
       )}
-  </div>
+    </div>
   );
 }
      

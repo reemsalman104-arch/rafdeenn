@@ -1,11 +1,13 @@
 import { createContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { registerUser , loginUser , forgotPassword , logoutUser , deleteAccount } from "../api/auth";
 
 export const AuthContext = createContext();
 
 export function AuthProvider({ children }) {
   const navigate = useNavigate();
-
+const[isLoading, setIsLoading] = useState(false);
+const[email, setEmail] = useState('');
   const [form, setForm] = useState({
     name: "",
     phone: "",
@@ -13,6 +15,12 @@ export function AuthProvider({ children }) {
     password: "",
     confirmPassword: "",
   });
+  const[message, setMessage] = useState('');
+   const [loginform, setloginForm] = useState({
+    email: "",
+    password: "",
+     });
+
 
   const [errors, setErrors] = useState({});
 
@@ -21,8 +29,15 @@ export function AuthProvider({ children }) {
     localStorage.setItem("userRole", role);
   };
 
+
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
+  const handleChangelogin = (e) => {
+    setloginForm({ ...loginform, [e.target.name]: e.target.value });
+  };
+   const handleChangepassword = (e) => {
+    setEmail(e.target.value);
   };
 
   const validate = () => {
@@ -44,8 +59,8 @@ export function AuthProvider({ children }) {
 
     if (!form.password) {
       newErrors.password = "كلمة السر مطلوبة";
-    } else if (form.password.length < 6) {
-      newErrors.password = "كلمة السر يجب أن تكون 6 أحرف على الأقل";
+    } else if (form.password.length < 8) {
+      newErrors.password = "كلمة السر يجب أن تكون 8 أحرف على الأقل";
     }
 
     if (form.password !== form.confirmPassword) {
@@ -56,44 +71,124 @@ export function AuthProvider({ children }) {
     return Object.keys(newErrors).length === 0;
   };
 
-  const handleRegister = (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
+     if (!validate()) return;
+    setIsLoading(true); 
+    setErrors({});
+    
+try{
 
-    if (!validate()) return;
+   
 
-    const users = JSON.parse(localStorage.getItem("users")) || [];
+    const data = await registerUser ({name : form.name , email : form.email , phone : form.phone , password : form.password , password_confirmation: form.confirmPassword}); 
 
-    const emailExists = users.find((u) => u.email === form.email);
-    if (emailExists) {
-      alert("البريد الإلكتروني مستخدم مسبقاً");
-      return;
+localStorage.setItem("token", data.token);
+
+login(data.user?.email, data.user?.role);
+ navigate("/wheel", { replace: true });
+  
     }
+      catch (error) {
+        if(error.errors){
+        setErrors( error.errors);}
+        else{setErrors({server:" errorin enroll"});}}
+      
+      finally{setIsLoading(false);}}
 
-    const newUser = {
-      name: form.name,
-      phone: form.phone,
-      email: form.email,
-      password: form.password,
-      role: "user",
-    };
+    
+  
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    
+    //  if (!validate()) return;
+    setIsLoading(true); 
+    setErrors({});
+   
+    
+try{
 
-    localStorage.setItem("users", JSON.stringify([...users, newUser]));
-    localStorage.setItem("currentUserName", newUser.name);
-    login(newUser.email, newUser.role);
+   
 
-    alert("تم إنشاء الحساب 🎉");
+    const data = await loginUser ({ email : loginform.email , password : loginform.password }); 
 
-    navigate("/wheel", { replace: true });
-  };
+localStorage.setItem("token", data.token);
+localStorage.setItem("userRole", data.user.role);
 
+
+console.log(data.user.role)
+//  navigate("/wheel", { replace: true });
+  if (data.user.role === "admin") {
+      navigate("/dashboard", { replace: true });
+    } else {
+      navigate("/wheel", { replace: true });
+    }
+  
+    }
+      catch (error) {
+        if(error.message){
+        setErrors( {server:"بيانات تسجيل الدخول غير صحيحة"});}
+      }
+      
+      finally{setIsLoading(false);}}
+
+    const handleForgotPassword = async (event) => {
+  event.preventDefault();
+  setIsLoading(true); 
+  setErrors({});
+  setMessage('');
+ 
+
+  try {
+   const result = await forgotPassword(email);
+   console.log(result);
+   setMessage("تم إرسال رابط إعادة تعيين كلمة المرور إلى بريدك الإلكتروني");
+
+     
+    
+   
+  } catch (error) {
+    console.log(error);
+    alert('err')
+   // setErrors({ server: error.message || "فشل في إرسال رابط إعادة تعيين كلمة المرور" });
+    //throw new Error( "فشل في إرسال رابط إعادة تعيين كلمة المرور");
+  } finally {
+    setIsLoading(false);
+    setEmail('');
+  }
+};
+  
+const logout = async () => {
+  setIsLoading(true);
+  try {
+    await logoutUser();
+    
+    navigate("/login", { replace: true });
+  } 
+  catch {} 
+  
+finally {
+    setIsLoading(false);
+   localStorage.removeItem("token");
+  }}
+const handleDeleteAccount = async (password) => { 
+  
+  
+  try { 
+   
+   const token  = localStorage.getItem("token"); 
+   const result = await deleteAccount(password, token); 
+    return result;  } 
+catch (error) {    throw error;  } };
   return (
     <AuthContext.Provider
       value={{
         form,
-        errors,
+        errors,email, handleChangepassword ,handleDeleteAccount,
         handleChange,
         handleRegister,
-        login,
+        login,isLoading,handleLogin ,loginform 
+        , handleChangelogin ,handleForgotPassword ,message, logout
       }}
     >
       {children}
