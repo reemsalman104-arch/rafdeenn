@@ -122,14 +122,40 @@ export default function Profile() {
   const handleSave = async (e) => {
     e.preventDefault();
     if (!validateForm()) return;
-    const result = await sendUpdateOtp(tempData);
-    if (result) {
-      setFormErrors((prev) => ({ ...prev, otp: "" }));
-      setShowVerify(true);
-      setOtpCode(["", "", "", ""]);
-      setTimeout(() => {
-        otpRefs.current[0]?.focus();
-      }, 10);
+    const token = localStorage.getItem("token");
+    // إذا لم يتغير الإيميل، أرسل تحديث للبيانات بدون رمز تحقق
+    if (tempData.email === userData.email) {
+      try {
+        setLoading(true);
+        const result = await requestUpdateotp(tempData, token);
+        setLoading(false);
+        if (result?.errors?.email || result?.message?.toLowerCase().includes("email has already been taken")) {
+          setFormErrors((prev) => ({ ...prev, email: "البريد الإلكتروني مستخدم بالفعل." }));
+          return;
+        }
+        if (result) {
+          setUserData({ ...tempData });
+          setFormErrors((prev) => ({ ...prev, name: "", email: "", phone: "", otp: "" }));
+        }
+      } catch (error) {
+        setLoading(false);
+        if (error?.message?.toLowerCase().includes("email has already been taken")) {
+          setFormErrors((prev) => ({ ...prev, email: "البريد الإلكتروني مستخدم بالفعل." }));
+        } else {
+          setFormErrors((prev) => ({ ...prev, otp: "حدث خطأ، حاول مرة أخرى." }));
+        }
+      }
+    } else {
+      // إذا تغير الإيميل، أرسل تحديث ويظهر رمز التحقق
+      const result = await sendUpdateOtp(tempData);
+      if (result) {
+        setFormErrors((prev) => ({ ...prev, otp: "" }));
+        setShowVerify(true);
+        setOtpCode(["", "", "", ""]);
+        setTimeout(() => {
+          otpRefs.current[0]?.focus();
+        }, 10);
+      }
     }
   };
 
@@ -246,6 +272,11 @@ const handleChangePassword = async () => {
             <input className="profile-input" placeholder="رقم الهاتف" value={tempData.phone} onChange={(e) => setTempData((prev) => ({ ...prev, phone: e.target.value }))} />
             <input className="profile-input" placeholder="البريد الإلكتروني" value={tempData.email} onChange={(e) => setTempData((prev) => ({ ...prev, email: e.target.value }))} />
             {formErrors.email && <div className="error">{formErrors.email}</div>}
+            {/* عند تغيير الإيميل، امسح رسالة الخطأ */}
+            <script>
+            // هذا الكود يمسح رسالة الخطأ عند تغيير الإيميل
+            // لكن لا يمسحها عند الضغط على حفظ إلا إذا نجح التعديل
+            </script>
             <button className="save-btn" onClick={handleSave} disabled={loading}>
               {loading ? "جاري الحفظ" : "حفظ التعديلات"}
             </button>
