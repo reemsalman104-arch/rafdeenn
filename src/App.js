@@ -59,7 +59,7 @@ function App() {
     
       <Routes>
         {/* Login & Register (عام للجميع) */}
-        <Route path="/" element={<Login />} />
+        {/* <Route path="/" element={<Login />} /> */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
