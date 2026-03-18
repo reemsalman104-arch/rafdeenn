@@ -1,23 +1,40 @@
 
 import { useState, useEffect, useContext, useRef } from "react";
-import { useNavigate } from "react-router-dom";
 import { Wheel } from "react-custom-roulette";
 import logo from "../assets/logo.png";
 import Navbar from "../components/Navbar";
-import { getWheelSections, spinWheelRequest } from "../api/api";
+import { getWheelSections, spinWheelRequest, getAdvertisements } from "../api/api";
 import { AuthContext } from "../context/AuthContext";
 import '../foldcss/wheel.css';
 
 
 export default function Wheell() {
+    // eslint-disable-next-line no-unused-vars
     const { logout } = useContext(AuthContext);
 
   // const navigate = useNavigate();
   // const username = localStorage.getItem("currentUserName") || "User";
   const [showAd, setShowAd] = useState(false);
+  const [adVideo, setAdVideo] = useState(null);
 
   useEffect(() => {
     setShowAd(true);
+    async function loadAdvertisements() {
+      try {
+        const data = await getAdvertisements();
+        console.log("advertisements response:", data);
+        if (Array.isArray(data) && data.length > 0) {
+          console.log("Ad video URL:", data[0].video_url);
+          setAdVideo(data[0].video_url);
+        } else {
+          console.log("No advertisements found");
+        }
+      } catch (e) {
+        console.error("failed to fetch advertisements", e);
+      }
+    }
+    loadAdvertisements();
+
     async function loadSections() {
       try {
         const data = await getWheelSections();
@@ -106,15 +123,6 @@ export default function Wheell() {
     );
   };
 
-  // const handleLogout = () => {
-  //   localStorage.clear();
-  //   navigate("/login");
-  // };
-
-  useEffect(() => {
-    setShowAd(true);
-  }, []);
-
   return (
     <div className="wheel-container">
       {showAd && (
@@ -124,9 +132,16 @@ export default function Wheell() {
               ✕
             </button>
 
-            <video autoPlay controls className="modal-video">
-              <source src="/video/ad.mp4" type="video/mp4" />
-            </video>
+            {adVideo ? (
+              <video autoPlay controls className="modal-video">
+                <source src={adVideo} type="video/quicktime" />
+                <source src={adVideo} type="video/mp4" />
+              </video>
+            ) : (
+              <video autoPlay controls className="modal-video">
+                <source src="/video/ad.mp4" type="video/mp4" />
+              </video>
+            )}
           </div>
         </div>
       )}

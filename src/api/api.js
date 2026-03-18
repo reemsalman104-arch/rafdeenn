@@ -130,3 +130,31 @@ export const updateSpinStatus = (spinId, status) => {
     body: JSON.stringify({ status }),
   });
 };
+
+// ---------- ADVERTISEMENTS ----------
+export const getAdvertisements = () => {
+  return request("/api/advertisements", {
+    method: "GET",
+  });
+};
+
+export const adminGetAdvertisements = () => {
+  return request("/api/admin/advertisements", {
+    method: "GET",
+    headers: { ...authHeaders() },
+  });
+};
+
+export const adminUpdateAdvertisement = (id, videoFile) => {
+  const formData = new FormData();
+  formData.append("video", videoFile);
+  
+  return request(`/api/admin/advertisements/${id}`, {
+    method: "POST",
+    headers: {
+      ...authHeaders(),
+      "X-HTTP-Method-Override": "PUT",
+    },
+    body: formData,
+  });
+};
