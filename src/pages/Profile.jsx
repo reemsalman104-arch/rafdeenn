@@ -298,7 +298,7 @@ const handleChangePassword = async () => {
                 {previousAwards?.length > 0 ? (
                   previousAwards.map((award, index) => (
                     <tr key={index}>
-                      <td>{award?.wheel_section.prize_name ?? award?.name ?? "غير موجود"}</td>
+                      <td>{award?.wheel_section.title ?? award?.name ?? "غير موجود"}</td>
                       <td>{award?.date ?? award?.created_at ?? "غير متوفر"}</td>
                       <td>{award?.status ?? "مفتوح"}</td>
                     </tr>
