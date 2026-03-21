@@ -1,0 +1,324 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f5f5;
+}
+
+/* dashboard */
+
+.dashboard {
+  width: 100%;
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* navbar */
+
+.navbar{
+display:flex;
+justify-content:center;
+gap:15px;
+padding:20px;
+flex-wrap:wrap;
+background:white;
+border-bottom:1px solid #ddd;
+}
+
+.nav-btn{
+
+padding:10px 18px;
+border:none;
+background:#eee;
+cursor:pointer;
+border-radius:6px;
+font-size:16px;
+transition:0.3s;
+
+}
+
+.nav-btn.active{
+background:#22c55e;
+color:white;
+}
+
+.logout-btn{
+
+padding:10px 18px;
+border:none;
+background:#e53935;
+color:white;
+border-radius:6px;
+cursor:pointer;
+
+}
+
+/* content */
+
+.content{
+padding:25px;
+}
+
+/* wheel edit */
+
+.add-box{
+display:flex;
+gap:10px;
+flex-wrap:wrap;
+margin-bottom:20px;
+
+}
+
+.add-box input{
+
+padding:10px;
+flex:1;
+min-width:200px;border-radius: 25px;
+
+}
+
+.add-box button{
+
+padding:10px 21px;
+background:#4caf50;
+color:white;
+border:none;
+cursor:pointer;
+border-radius: 25px;
+
+}
+
+/* names list */
+
+.names-list{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.name-item{
+
+display:flex;
+justify-content:space-between;
+align-items:center;
+background:white;
+padding:10px;
+border-radius:6px;
+
+}
+
+/* delete button */
+
+.delete-btn{
+
+background:#e53935;
+color:white;
+border:none;
+padding:6px 12px;
+cursor:pointer;
+border-radius:4px;
+
+}
+
+/* table */
+
+.table-box{
+overflow-x:auto;
+background:white;
+border-radius:8px;
+}
+
+table{
+width:100%;
+border-collapse:collapse;
+min-width:600px;
+}
+
+th,td{
+
+padding:12px;
+border-bottom:1px solid #eee;
+text-align:left;
+
+}
+
+th{
+background:#fafafa;
+}
+
+select{
+padding:6px;
+}
+
+/* responsive buttons */
+
+@media (max-width: 900px) {
+  .nav-btn {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+
+  .logout-btn {
+    font-size: 14px;
+    padding: 8px 14px;
+  }
+
+  .add-box input {
+    min-width: 80%;
+  }
+}
+
+@media (max-width: 768px) {
+  body {
+    font-size: 14px;
+  }
+
+  .nav-btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .logout-btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+
+  .content {
+    padding: 15px;
+  }
+
+  table {
+    font-size: 12px;
+  }
+
+  th,
+  td {
+    padding: 8px;
+  }
+
+  .add-box {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .add-box input {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .add-box button {
+    width: 100%;
+  }
+
+  .name-item {
+    flex-direction: column;
+    gap: 8px;
+  }
+}
+
+@media (max-width: 600px) {
+  .add-box {
+    position: relative;
+    min-width: 100%;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .add-box input {
+    width: 100%;
+    min-width: unset;
+  }
+
+  .add-box button {
+    width: 100%;
+  }
+
+  .nav-btn {
+    font-size: 10px;
+    padding: 5px 8px;
+  }
+
+  .logout-btn {
+    font-size: 10px;
+    padding: 5px 8px;
+  }
+
+  .content {
+    padding: 10px;
+  }
+
+  table {
+    font-size: 11px;
+    min-width: 100%;
+  }
+
+  th,
+  td {
+    padding: 6px;
+  }
+
+  .names-list {
+    gap: 8px;
+  }
+
+  .name-item {
+    flex-direction: column;
+    gap: 8px;
+    padding: 8px;
+  }
+
+  .delete-btn {
+    width: 100%;
+  }
+
+  .table-box {
+    border-radius: 4px;
+  }
+}
+
+@media (max-width: 400px) {
+  .add-box {
+    position: relative;
+    min-width: 100%;
+    gap: 8px;
+  }
+
+  .nav-btn {
+    font-size: 9px;
+    padding: 4px 6px;
+  }
+
+  .logout-btn {
+    font-size: 9px;
+    padding: 4px 6px;
+  }
+
+  .content {
+    padding: 8px;
+  }
+
+  .add-box input {
+    width: 100%;
+    padding: 8px;
+  }
+
+  .add-box button {
+    width: 100%;
+  }
+
+  table {
+    font-size: 10px;
+  }
+
+  th,
+  td {
+    padding: 4px;
+  }
+
+  .name-item {
+    padding: 6px;
+  }
+}

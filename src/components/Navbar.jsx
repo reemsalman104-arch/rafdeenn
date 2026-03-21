@@ -1,25 +1,39 @@
-import { useState } from "react";
+import { useState , useContext, useEffect} from "react";
 import { useNavigate } from "react-router-dom";
+import { AuthContext } from "../context/AuthContext";
+import { getProfile } from "../api/auth";
+//import { ProfileContext } from "../context/profileContext";
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
+  const{isLoading , logout } =useContext(AuthContext)
+  // const{userData  } =useContext(ProfileContext)
+    const [user, setUser] = useState("");
 
-  const users = JSON.parse(localStorage.getItem("users")) || [];
-  const currentEmail = localStorage.getItem("currentUser");
-  const currentUser = users.find((u) => u.email === currentEmail);
-
-  const handleLogout = () => {
-    localStorage.removeItem("isUser");
-    localStorage.removeItem("currentUser");
-    navigate("/login");
-  };
+  // const users = JSON.parse(localStorage.getItem("users")) || [];
+  // const currentEmail = localStorage.getItem("currentUser");
+  // const currentUser = users.find((u) => u.email === currentEmail);
+useEffect(() => {
+  const fetchProfile = async () => {
+    try {
+      const data= await getProfile()
+      console.log(data)
+      setUser(data.user.name)
+    }
+    
+    catch (error) {
+      console.log(error);}
+    }
+    fetchProfile();
+    },[])
+ 
 
   return (
     <div style={styles.container}>
       <div style={styles.right}>
         <span style={styles.hello}>
-          Hello{currentUser ? `, ${currentUser.name}` : ""}
+          Hello, {user}
         </span>
 
         <div style={styles.hamburgerWrapper}>
@@ -32,12 +46,14 @@ export default function Navbar() {
               <div style={styles.item} onClick={() => navigate("/profile")}>
                 الملف الشخصي
               </div>
-              <div
-                style={{ ...styles.item, color: "red" }}
-                onClick={handleLogout}
+              <button
+                style={{ width:'100%', backgroundColor: "red", color:'white',  padding: "12px",border:'none',
+    cursor: "pointer",
+    borderRadius:'5px'  }}
+                onClick={logout}
               >
-                تسجيل خروج
-              </div>
+              {isLoading ? "...جاري تسجيل الخروج" : "تسجيل خروج"}
+              </button>
             </div>
           )}
         </div>
